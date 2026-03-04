@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require_relative "../lib/livebarn_tools"
+require "optparse"
+
+OptionParser.new do |opts|
+  opts.on("-h", "--help") do
+    puts <<~USAGE
+      Usage: trim_video <input_file> <front_trim_time> <end_trim_time>
+
+      Trim the beginning and end off a video file.
+
+      Removes <front_trim_time> from the start and <end_trim_time> from the end
+      of <input_file>, writing the result as {basename}_trimmed.mp4 in the
+      current directory. Uses lossless stream copy (no re-encoding).
+
+      Times can be specified as HH:MM:SS, MM:SS, or seconds.
+
+      Arguments:
+        input_file       Path to the input MP4 file
+        front_trim_time  Amount to trim from the beginning (e.g., 00:12:00)
+        end_trim_time    Amount to trim from the end (e.g., 00:15:00)
+
+      Example:
+        trim_video game.mp4 00:12:00 00:15:00
+        # Output: game_trimmed.mp4
+    USAGE
+    exit 0
+  end
+end.parse!
+
+unless ARGV.length == 3
+  $stderr.puts "Error: expected 3 arguments (input_file, front_trim, end_trim), got #{ARGV.length}"
+  $stderr.puts "Run 'trim_video --help' for usage."
+  exit 1
+end
+
+begin
+  LivebarnTools::Trimmer.new.trim(ARGV[0], ARGV[1], ARGV[2])
+rescue LivebarnTools::Error => e
+  $stderr.puts "Error: #{e.message}"
+  exit 1
+end

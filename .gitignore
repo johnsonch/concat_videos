@@ -1,0 +1,6 @@
+client_secret.json
+tokens.yaml
+.bundle/
+vendor/
+Gemfile.lock
+*.mp4

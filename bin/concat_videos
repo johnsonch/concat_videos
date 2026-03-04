@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require_relative "../lib/livebarn_tools"
+require "optparse"
+
+OptionParser.new do |opts|
+  opts.on("-h", "--help") do
+    puts <<~USAGE
+      Usage: concat_videos <arena_name> <team_name>
+
+      Concatenate Livebarn arena MP4 segments into a single video.
+
+      Finds all files matching {arena_name}_*.mp4 in the current directory,
+      sorts them by name, and concatenates them losslessly using FFmpeg.
+      Output is named {date}_{team_name}.mp4.
+
+      Arguments:
+        arena_name   Name of the arena (matches {arena_name}_*.mp4)
+        team_name    Team name used in the output filename
+
+      Example:
+        concat_videos main-court tigers
+        # Given: main-court_2026-03-01T10-00.mp4, main-court_2026-03-01T11-00.mp4
+        # Output: 2026-03-01_tigers.mp4
+    USAGE
+    exit 0
+  end
+end.parse!
+
+unless ARGV.length == 2
+  $stderr.puts "Error: expected 2 arguments (arena_name, team_name), got #{ARGV.length}"
+  $stderr.puts "Run 'concat_videos --help' for usage."
+  exit 1
+end
+
+begin
+  LivebarnTools::Concatenator.new.concat(ARGV[0], ARGV[1])
+rescue LivebarnTools::Error => e
+  $stderr.puts "Error: #{e.message}"
+  exit 1
+end

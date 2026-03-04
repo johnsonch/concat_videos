@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require_relative "../lib/livebarn_tools"
+
+begin
+  LivebarnTools::Uploader.new.run(ARGV)
+rescue LivebarnTools::Error => e
+  $stderr.puts "Error: #{e.message}"
+  exit 1
+end
