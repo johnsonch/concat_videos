@@ -36,6 +36,18 @@ module LivebarnTools
         match = basename.match(/\A(.+?)_\d{4}-\d{2}-\d{2}T/)
         match ? match[1] : nil
       end
+
+      def youtube_auth_status
+        secret = File.exist?(Uploader::SECRET_PATH)
+        token  = File.exist?(Uploader::TOKEN_PATH)
+        if secret && token
+          :ready
+        elsif secret
+          :needs_auth
+        else
+          :no_credentials
+        end
+      end
     end
 
     # Step 1: Upload form

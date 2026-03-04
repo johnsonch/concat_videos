@@ -18,27 +18,43 @@
 
   <section>
     <h3>Upload to YouTube</h3>
-    <form action="/upload_youtube/<%= job.id %>" method="post">
-      <div class="field">
-        <label for="title">Title</label>
-        <% date = File.basename(job.concat_file || '', '.mp4')[/^\d{4}-\d{2}-\d{2}/] rescue nil %>
-        <input type="text" id="title" name="title"
-               value="<%= date ? "#{job.team} #{date}" : job.team %>"
-               required>
+    <% auth = youtube_auth_status %>
+    <% if auth == :no_credentials %>
+      <div class="error">
+        <strong>YouTube credentials not found.</strong><br>
+        Place your Google OAuth <code>client_secret.json</code> at:<br>
+        <code><%= LivebarnTools::Uploader::SECRET_PATH %></code><br><br>
+        See the <a href="https://github.com/johnsonch/concat_videos#youtube--google-cloud-setup">setup guide</a> for instructions.
       </div>
+    <% else %>
+      <% if auth == :needs_auth %>
+        <div class="error">
+          <strong>YouTube authorization needed.</strong><br>
+          Run <code>upload_youtube</code> on the host to authorize via browser, then restart the container.
+        </div>
+      <% end %>
+      <form action="/upload_youtube/<%= job.id %>" method="post">
+        <div class="field">
+          <label for="title">Title</label>
+          <% date = File.basename(job.concat_file || '', '.mp4')[/^\d{4}-\d{2}-\d{2}/] rescue nil %>
+          <input type="text" id="title" name="title"
+                 value="<%= date ? "#{job.team} #{date}" : job.team %>"
+                 required>
+        </div>
 
-      <div class="field">
-        <label for="season">Season / Playlist</label>
-        <input type="text" id="season" name="season" placeholder="Spring 2026">
-      </div>
+        <div class="field">
+          <label for="season">Season / Playlist</label>
+          <input type="text" id="season" name="season" placeholder="Spring 2026">
+        </div>
 
-      <div class="field">
-        <label for="description">Description</label>
-        <textarea id="description" name="description" rows="3"></textarea>
-      </div>
+        <div class="field">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="3"></textarea>
+        </div>
 
-      <button type="submit">Upload to YouTube</button>
-    </form>
+        <button type="submit">Upload to YouTube</button>
+      </form>
+    <% end %>
   </section>
 </div>
 

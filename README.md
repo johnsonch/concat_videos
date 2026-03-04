@@ -39,20 +39,58 @@ Or use `process_game` to run all three steps in one command.
 
 ## YouTube / Google Cloud Setup
 
-Before uploading, you need Google OAuth credentials:
+To upload videos to YouTube, you need Google OAuth credentials. This is a one-time setup.
+
+### 1. Create Google OAuth credentials
+
+1. Go to [console.cloud.google.com](https://console.cloud.google.com/) and create a project (or select an existing one)
+2. Enable the **YouTube Data API v3** (APIs & Services → Library → search "YouTube Data API v3")
+3. Go to **APIs & Services → Credentials → Create Credentials → OAuth client ID**
+4. Application type: **Desktop app**
+5. Download the JSON file
+
+### 2. Place the credentials file
+
+| Platform | Path |
+|----------|------|
+| macOS / Linux | `~/.config/livebarn_tools/client_secret.json` |
+| Windows | `%USERPROFILE%\.config\livebarn_tools\client_secret.json` |
+| Docker (any OS) | Mount the directory into the container (see below) |
+
+**macOS / Linux:**
 
 ```sh
-make setup
+mkdir -p ~/.config/livebarn_tools
+cp ~/Downloads/client_secret_*.json ~/.config/livebarn_tools/client_secret.json
 ```
 
-This prints step-by-step instructions. In short:
+**Windows (PowerShell):**
 
-1. Create a project at [console.cloud.google.com](https://console.cloud.google.com/)
-2. Enable the **YouTube Data API v3**
-3. Create an **OAuth 2.0 client ID** (Desktop app type)
-4. Download the JSON and copy it to `~/.config/livebarn_tools/client_secret.json`
+```powershell
+mkdir "$env:USERPROFILE\.config\livebarn_tools" -Force
+copy "$env:USERPROFILE\Downloads\client_secret_*.json" "$env:USERPROFILE\.config\livebarn_tools\client_secret.json"
+```
 
-On first upload, a browser window opens for Google authorization. The refresh token is saved at `~/.config/livebarn_tools/tokens.yaml` so you only authorize once.
+### 3. Authorize
+
+On first upload, a browser window opens for Google authorization. You approve access once and a refresh token is saved so you don't need to authorize again.
+
+- **CLI (native):** Just run `upload_youtube` or `process_game` — the browser opens automatically.
+- **Docker / Web UI:** The OAuth loopback flow requires a browser on the host. Authorize on macOS/Linux first using the native CLI, then mount the tokens into Docker. On Windows, use the Web UI — it will display the authorization URL for you to open manually.
+
+**Windows with Docker (Web UI):**
+
+```powershell
+docker-compose up --build
+```
+
+The `docker-compose.yml` mounts `~/.config/livebarn_tools` from your home directory. On Windows, Docker Desktop maps `$HOME` to `%USERPROFILE%`. If you haven't authorized yet, the Web UI will show the Google authorization URL — open it in your browser, approve access, and the token will be saved for future use.
+
+**Windows with Docker (CLI):**
+
+```powershell
+docker run --rm -it -v "${PWD}:/workspace" -v "${env:USERPROFILE}\.config\livebarn_tools:/root/.config/livebarn_tools" livebarn-tools process_game --help
+```
 
 ## Livebarn Plan Requirement
 
