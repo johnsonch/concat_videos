@@ -1,18 +1,22 @@
 # Livebarn Game Video Toolkit
 
-Process Livebarn hockey game recordings: download segments, concatenate them, trim to game length, and upload to YouTube as unlisted videos organized into per-season playlists.
+Turn raw Livebarn arena recordings into clean, trimmed game videos and publish them to YouTube — no video editing software required.
+
+Livebarn captures hockey games as a series of 30-minute segments from a fixed rink camera. This toolkit merges those segments into a single file, trims the dead time before and after the game, strips arena audio if you want, and uploads the result as an unlisted YouTube video organized into per-season playlists. The whole process takes one command or a few clicks.
+
+**Self-hosted web UI** — Run `docker-compose up` and open a browser. A step-by-step wizard walks you through uploading segments, previewing video with a built-in player, clicking to set trim points, and downloading or uploading to YouTube. Everything runs locally on your machine.
+
+**CLI for scripting and AI agents** — Four composable commands (`concat_videos`, `trim_video`, `upload_youtube`, `process_game`) that work from the terminal, in shell scripts, or driven by AI coding assistants like Claude Code. Install natively on macOS/Linux or run via Docker.
 
 ## How to Use This
 
-There are three ways to run these tools. Pick whichever fits your workflow:
+Pick whichever method fits your workflow:
 
 | Method | Best for | Setup |
 |--------|----------|-------|
 | [**Web UI**](#web-ui-docker) | Interactive use — preview video, click to set trim points | `docker-compose up --build` |
 | [**CLI (native)**](#cli-native) | Scripting, AI agents, automation on macOS/Linux | `make deps && sudo make install` |
 | [**CLI (Docker)**](#cli-docker) | CLI without installing Ruby/FFmpeg locally | `docker build -t livebarn-tools .` |
-
-The **Web UI** is a browser-based wizard ideal for manual game processing. The **CLI** is a set of composable commands that work well for scripting, automation, and AI agents (e.g., Claude Code can run `process_game` end-to-end from the terminal).
 
 ## Workflow
 
