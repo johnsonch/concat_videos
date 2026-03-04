@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'johnsonch'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Run specs
+        run: bundle exec rspec
+
+  docker-build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'johnsonch'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build CLI image
+        run: docker build -t livebarn-tools .
+
+      - name: Build Web UI image
+        run: docker build -f Dockerfile.web -t livebarn-tools-web .

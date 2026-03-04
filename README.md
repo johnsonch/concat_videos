@@ -1,5 +1,7 @@
 # Livebarn Game Video Toolkit
 
+[![Tests](https://github.com/johnsonch/concat_videos/actions/workflows/ci.yml/badge.svg)](https://github.com/johnsonch/concat_videos/actions/workflows/ci.yml)
+
 Turn raw Livebarn arena recordings into clean, trimmed game videos and publish them to YouTube — no video editing software required.
 
 Livebarn captures hockey games as a series of 30-minute segments from a fixed rink camera. This toolkit merges those segments into a single file, trims the dead time before and after the game, strips arena audio if you want, and uploads the result as an unlisted YouTube video organized into per-season playlists. The whole process takes one command or a few clicks.
