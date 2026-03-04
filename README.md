@@ -10,15 +10,51 @@ Livebarn captures hockey games as a series of 30-minute segments from a fixed ri
 
 **CLI for scripting and AI agents** — Four composable commands (`concat_videos`, `trim_video`, `upload_youtube`, `process_game`) that work from the terminal, in shell scripts, or driven by AI coding assistants like Claude Code. Install natively on macOS/Linux or run via Docker.
 
-## How to Use This
+## Quick Install
 
-Pick whichever method fits your workflow:
+### Mac / Linux
+
+Installs the CLI tools. Requires [Homebrew](https://brew.sh) (macOS) or apt (Linux) for dependencies.
+
+```sh
+# Install dependencies first
+brew install ffmpeg ruby git        # macOS
+# sudo apt install ffmpeg ruby-full git  # Ubuntu / Debian
+
+# Install livebarn tools
+curl -sSL https://raw.githubusercontent.com/johnsonch/concat_videos/main/install.sh | bash
+```
+
+This clones the repo to `~/.livebarn-tools`, installs Ruby gems, and symlinks four commands into `/usr/local/bin`. Run it again to update.
+
+### Windows
+
+Installs the Web UI via Docker. Requires [Docker Desktop](https://www.docker.com/products/docker-desktop/) and [Git](https://git-scm.com/download/win).
+
+Open PowerShell and run:
+
+```powershell
+irm https://raw.githubusercontent.com/johnsonch/concat_videos/main/install.ps1 | iex
+```
+
+This clones the repo, builds the Docker image, and tells you how to start the Web UI. To launch it afterward:
+
+```powershell
+cd "$env:USERPROFILE\.livebarn-tools"
+docker compose up
+```
+
+Then open http://localhost:4567 in your browser.
+
+## All Installation Options
 
 | Method | Best for | Setup |
 |--------|----------|-------|
 | [**Web UI**](#web-ui-docker) | Interactive use — preview video, click to set trim points | `docker-compose up --build` |
-| [**CLI (native)**](#cli-native) | Scripting, AI agents, automation on macOS/Linux | `make deps && sudo make install` |
+| [**CLI (native)**](#cli-native) | Scripting, AI agents, automation on macOS/Linux | `curl` install above |
 | [**CLI (Docker)**](#cli-docker) | CLI without installing Ruby/FFmpeg locally | `docker build -t livebarn-tools .` |
+
+---
 
 ## Workflow
 
@@ -122,7 +158,7 @@ The `arena_name` argument to `concat_videos` and `process_game` is the portion b
 
 ## Web UI (Docker)
 
-A browser-based wizard for interactive game processing. Upload segments, preview video with a built-in player, click to set trim points, and download or upload the result.
+A browser-based wizard for interactive game processing. Upload segments, preview video with a built-in player, click to set trim points, and download or upload the result. Works on macOS, Linux, and Windows — anywhere Docker runs.
 
 ```sh
 docker-compose up --build
@@ -143,21 +179,12 @@ The arena name is detected automatically from the Livebarn filenames. YouTube up
 
 Install directly on macOS or Linux for the fastest experience. The CLI commands are ideal for scripting, automation, and AI agents.
 
-### Quick Install
-
-```sh
-curl -sSL https://raw.githubusercontent.com/johnsonch/concat_videos/main/install.sh | bash
-```
-
-This checks for dependencies, clones the repo to `~/.livebarn-tools`, installs gems, and symlinks the commands into `/usr/local/bin`. Run it again to update.
-
 ### Requirements
 
 - **FFmpeg** / **ffprobe** — video concatenation and trimming
 - **Ruby** + **Bundler** — all tools are Ruby scripts
 - **macOS** — tested and fully supported
 - **Linux** — should work (uses `xdg-open` fallback for OAuth)
-- **Windows** — untested; use Docker instead
 
 Install dependencies before running the install script:
 
@@ -170,6 +197,8 @@ sudo apt install ffmpeg ruby-full git
 ```
 
 ### Manual Installation
+
+If you prefer not to use the quick install script:
 
 ```sh
 git clone https://github.com/johnsonch/concat_videos.git
