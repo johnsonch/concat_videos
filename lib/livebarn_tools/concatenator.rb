@@ -6,6 +6,10 @@ require "tempfile"
 module LivebarnTools
   class Concatenator
     def concat(arena_name, team_name, dir: Dir.pwd)
+      unless arena_name.match?(/\A[\w\-]+\z/)
+        raise LivebarnTools::Error, "Invalid arena name '#{arena_name}': only letters, numbers, underscores, and hyphens are allowed."
+      end
+
       segments = find_segments(arena_name, dir)
 
       if segments.empty?
@@ -16,7 +20,7 @@ module LivebarnTools
       output_file = File.join(dir, "#{date}_#{team_name}.mp4")
 
       Tempfile.create(["file_list", ".txt"], dir) do |f|
-        segments.each { |s| f.puts "file '#{s}'" }
+        segments.each { |s| f.puts "file '#{s.gsub("'", "'\\\\''")}'" }
         f.flush
 
         _out, err, status = Open3.capture3(

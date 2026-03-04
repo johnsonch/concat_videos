@@ -5,6 +5,8 @@ require "fileutils"
 require "yaml"
 require "json"
 require "socket"
+require "timeout"
+require "securerandom"
 require "net/http"
 require "uri"
 require "google/apis/youtube_v3"
@@ -108,6 +110,12 @@ module LivebarnTools
           "client_secret.json not found at #{path}\nRun 'make setup' for configuration instructions."
       end
 
+      mode = File.stat(path).mode & 0o777
+      if mode != 0o600
+        warn "WARNING: #{path} has permissions #{format('%04o', mode)}, expected 0600. " \
+             "Fix with: chmod 600 #{path}"
+      end
+
       raw = JSON.parse(File.read(path))
       cred = raw["installed"] || raw["web"]
       unless cred
@@ -129,7 +137,7 @@ module LivebarnTools
       )
 
       if File.exist?(token_path)
-        saved = YAML.safe_load(File.read(token_path), permitted_classes: [Symbol])
+        saved = YAML.safe_load(File.read(token_path))
         client.refresh_token = saved["refresh_token"]
         client.access_token  = saved["access_token"]
         client.expires_at    = Time.parse(saved["expires_at"]) if saved["expires_at"]
@@ -147,14 +155,29 @@ module LivebarnTools
       port = server.addr[1]
       client.redirect_uri = "http://127.0.0.1:#{port}"
 
+      state = SecureRandom.hex(16)
+      client.state = state
       auth_url = client.authorization_uri.to_s
       puts "Opening browser for Google authorization..."
       system("open", auth_url) || system("xdg-open", auth_url) || (
         puts "Open this URL in your browser:\n  #{auth_url}"
       )
 
-      conn = server.accept
+      begin
+        conn = Timeout.timeout(120) { server.accept }
+      rescue Timeout::Error
+        server.close
+        raise LivebarnTools::Error, "OAuth authorization timed out after 120 seconds. Please try again."
+      end
+
       request_line = conn.gets
+      returned_state = request_line[/state=([^&\s]+)/, 1]
+      unless returned_state == state
+        conn.close
+        server.close
+        raise LivebarnTools::Error, "OAuth state mismatch — possible CSRF attack. Please try again."
+      end
+
       code = request_line[/code=([^&\s]+)/, 1]
 
       conn.print "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"

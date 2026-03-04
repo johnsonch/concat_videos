@@ -49,7 +49,12 @@ module LivebarnTools
     end
 
     def to_seconds(time_str)
-      parts = time_str.to_s.split(":")
+      str = time_str.to_s.strip
+      unless str.match?(/\A\d+(\.\d+)?(:\d{1,2}(\.\d+)?){0,2}\z/)
+        raise LivebarnTools::Error, "Invalid time format '#{str}': use HH:MM:SS, MM:SS, or seconds"
+      end
+
+      parts = str.split(":")
       case parts.length
       when 3
         parts[0].to_f * 3600 + parts[1].to_f * 60 + parts[2].to_f
