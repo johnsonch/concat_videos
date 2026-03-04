@@ -30,7 +30,7 @@ deps:
 	@echo "Checking dependencies..."
 	@echo ""
 	@missing=0; \
-	for cmd in ffmpeg ffprobe ruby bundle; do \
+	for cmd in ffmpeg ffprobe ruby bundle docker; do \
 		if command -v $$cmd >/dev/null 2>&1; then \
 			echo "  [ok] $$cmd"; \
 		else \
@@ -41,8 +41,8 @@ deps:
 	echo ""; \
 	if [ $$missing -eq 1 ]; then \
 		echo "Install missing dependencies:"; \
-		echo "  macOS:  brew install ffmpeg ruby"; \
-		echo "  Ubuntu: sudo apt install ffmpeg ruby-full"; \
+		echo "  macOS:  brew install ffmpeg ruby docker"; \
+		echo "  Ubuntu: sudo apt install ffmpeg ruby-full docker.io"; \
 		echo ""; \
 		echo "Then install bundler: gem install bundler"; \
 		exit 1; \

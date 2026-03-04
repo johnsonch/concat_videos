@@ -30,6 +30,12 @@ Check and install dependencies:
 make deps
 ```
 
+## System Requirements
+
+- **macOS** — tested and fully supported
+- **Linux** — should work (uses `xdg-open` fallback); Docker is an option if you hit issues
+- **Windows** — untested; use [Docker](#docker) instead
+
 ## Installation
 
 ```sh
@@ -165,6 +171,44 @@ Uploads a video as unlisted. If `--season` is provided, finds or creates a match
 ```sh
 upload_youtube game_trimmed.mp4 --title "vs Tigers - Mar 1" --season "Spring 2026"
 ```
+
+## Docker
+
+Build the image once:
+
+```sh
+docker build -t livebarn-tools .
+```
+
+Run any command by mounting your video directory and config:
+
+```sh
+# Concatenate segments
+docker run --rm \
+  -v "$PWD:/workspace" \
+  -v "$HOME/.config/livebarn_tools:/root/.config/livebarn_tools" \
+  livebarn-tools concat_videos main-court tigers
+
+# Trim a video
+docker run --rm \
+  -v "$PWD:/workspace" \
+  -v "$HOME/.config/livebarn_tools:/root/.config/livebarn_tools" \
+  livebarn-tools trim_video 2026-03-01_tigers.mp4 00:12:00 00:05:00
+
+# Upload to YouTube
+docker run --rm \
+  -v "$PWD:/workspace" \
+  -v "$HOME/.config/livebarn_tools:/root/.config/livebarn_tools" \
+  livebarn-tools upload_youtube game_trimmed.mp4 --title "vs Tigers" --season "Spring 2026"
+
+# All-in-one
+docker run --rm \
+  -v "$PWD:/workspace" \
+  -v "$HOME/.config/livebarn_tools:/root/.config/livebarn_tools" \
+  livebarn-tools process_game main-court tigers 00:12:00 00:05:00 --season "Spring 2026"
+```
+
+**Note:** YouTube authentication requires a browser, so run `upload_youtube` on the host first to generate `~/.config/livebarn_tools/tokens.yaml`, then mount it into the container for subsequent uploads.
 
 ## License
 
