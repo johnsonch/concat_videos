@@ -73,6 +73,32 @@ This prints step-by-step instructions. In short:
 
 On first upload, a browser window opens for Google authorization. The refresh token is saved at `~/.config/livebarn_tools/tokens.yaml` so you only authorize once.
 
+## Livebarn Plan Requirement
+
+This workflow requires the [Livebarn Premium plan](https://www.livebarn.com/pricing), which allows downloading 30-minute video clips. The Standard plan only supports 30-second clip downloads, which is not practical for full game processing.
+
+## Livebarn File Naming
+
+Livebarn downloads video in 30-minute segments named with the arena and timestamp:
+
+```
+Kettle_Moraine_Ice_Center_Rink_1_2026-02-14T135956.mp4
+Kettle_Moraine_Ice_Center_Rink_1_2026-02-14T142956.mp4
+Kettle_Moraine_Ice_Center_Rink_1_2026-02-14T145956.mp4
+Kettle_Moraine_Ice_Center_Rink_1_2026-02-14T152956.mp4
+```
+
+The general pattern is `{Arena_Name}_Rink_{N}_{YYYY}-{MM}-{DD}T{HHMMSS}.mp4`. Other examples:
+
+```
+Viroqua_Community_Arena_Rink_1_2026-02-21T092956.mp4
+Sauk_Prairie_Ice_Arena_Rink_1_2026-02-28T094530.mp4
+Lake_Delton_Ice_Arena_Rink_1_2026-02-28T145955.mp4
+Onalaska_Omni_Center_Arena_2_2026-01-17T083333.mp4
+```
+
+The `arena_name` argument to `concat_videos` and `process_game` is the portion before the date — e.g., `Kettle_Moraine_Ice_Center_Rink_1`. The tool globs for `{arena_name}_*.mp4` in the current directory, so if you have multiple games at the same arena, put each game's segments in a separate folder.
+
 ## Usage
 
 ### All-in-one: `process_game`

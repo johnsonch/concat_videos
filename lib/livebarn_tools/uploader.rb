@@ -197,7 +197,8 @@ module LivebarnTools
           description: description
         ),
         status: Google::Apis::YoutubeV3::VideoStatus.new(
-          privacy_status: "unlisted"
+          privacy_status: "unlisted",
+          self_declared_made_for_kids: true
         )
       )
 
