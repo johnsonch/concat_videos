@@ -1,0 +1,50 @@
+<script>document.querySelector('[data-step="trim"]').classList.add('active');</script>
+
+<h2>Trim Video</h2>
+
+<p>Video duration: <strong><%= format_time(@duration) %></strong></p>
+
+<div class="player-container">
+  <video id="player" src="/video/<%= job.id %>" controls preload="metadata"></video>
+  <div class="timestamp">
+    Current position: <span id="current-time">00:00:00</span>
+  </div>
+</div>
+
+<form action="/trim/<%= job.id %>" method="post">
+  <div class="trim-controls">
+    <div class="field">
+      <label for="front_trim">Front Trim</label>
+      <div class="input-group">
+        <input type="text" id="front_trim" name="front_trim" value="00:00:00"
+               placeholder="HH:MM:SS" pattern="\d{1,2}(:\d{1,2}){0,2}">
+        <button type="button" id="set-front" class="btn-secondary">Use current position</button>
+      </div>
+      <small>Time to remove from the beginning</small>
+    </div>
+
+    <div class="field">
+      <label for="end_trim">End Trim</label>
+      <div class="input-group">
+        <input type="text" id="end_trim" name="end_trim" value="00:00:00"
+               placeholder="HH:MM:SS" pattern="\d{1,2}(:\d{1,2}){0,2}">
+        <button type="button" id="set-end" class="btn-secondary">Set end from here</button>
+      </div>
+      <small>Time to remove from the end</small>
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="checkbox-label">
+      <input type="checkbox" name="remove_audio" value="1">
+      Remove audio
+    </label>
+  </div>
+
+  <div class="actions">
+    <button type="submit">Trim Video</button>
+    <a href="/output/<%= job.id %>" class="btn-link">Skip trimming</a>
+  </div>
+</form>
+
+<script src="/player.js"></script>

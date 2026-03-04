@@ -1,0 +1,23 @@
+<script>document.querySelector('[data-step="upload"]').classList.add('active');</script>
+
+<h2>Upload Video Segments</h2>
+
+<% if @error %>
+  <div class="error"><%= @error %></div>
+<% end %>
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+  <div class="field">
+    <label for="team">Game Title</label>
+    <input type="text" id="team" name="team" placeholder="Tigers vs Hawks" required>
+    <small>Your team vs opponent (e.g., Tigers vs Hawks)</small>
+  </div>
+
+  <div class="field">
+    <label for="files">Video Segments</label>
+    <input type="file" id="files" name="files[]" accept="video/mp4,.mp4" multiple required>
+    <small>Select all Livebarn MP4 segments for this game</small>
+  </div>
+
+  <button type="submit">Upload &amp; Concatenate</button>
+</form>

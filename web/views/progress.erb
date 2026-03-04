@@ -1,0 +1,65 @@
+<% step_map = { "trim" => "concat", "output" => "trim", "upload_done" => "output" } %>
+<% active = step_map[@next_step] || "concat" %>
+<script>document.querySelector('[data-step="<%= active %>"]').classList.add('active');</script>
+
+<h2>Processing...</h2>
+
+<div id="progress">
+  <div class="spinner"></div>
+  <div id="messages"></div>
+</div>
+
+<script>
+(function() {
+  var messagesDiv = document.getElementById('messages');
+  var spinner = document.querySelector('.spinner');
+  var nextStep = '<%= @next_step %>';
+  var jobId = '<%= job.id %>';
+  var source = new EventSource('/progress/' + jobId + '/events');
+
+  source.onmessage = function(event) {
+    var data = event.data;
+
+    if (data.startsWith('done:')) {
+      source.close();
+      spinner.style.display = 'none';
+      var p = document.createElement('p');
+      p.className = 'success';
+      p.textContent = 'Done!';
+      messagesDiv.appendChild(p);
+
+      if (data.startsWith('done:upload:')) {
+        var url = data.substring('done:upload:'.length);
+        var link = document.createElement('a');
+        link.href = url;
+        link.textContent = url;
+        link.target = '_blank';
+        messagesDiv.appendChild(link);
+      }
+
+      setTimeout(function() {
+        window.location.href = '/' + nextStep + '/' + jobId;
+      }, 1000);
+      return;
+    }
+
+    if (data.startsWith('error:')) {
+      source.close();
+      spinner.style.display = 'none';
+      var p = document.createElement('p');
+      p.className = 'error';
+      p.textContent = 'Error: ' + data.substring(6);
+      messagesDiv.appendChild(p);
+      return;
+    }
+
+    var p = document.createElement('p');
+    p.textContent = data;
+    messagesDiv.appendChild(p);
+  };
+
+  source.onerror = function() {
+    source.close();
+  };
+})();
+</script>

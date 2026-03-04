@@ -4,7 +4,7 @@ require "open3"
 
 module LivebarnTools
   class Trimmer
-    def trim(input_path, front_trim, end_trim)
+    def trim(input_path, front_trim, end_trim, dir: nil, remove_audio: false)
       duration = probe_duration(input_path)
 
       front_sec = to_seconds(front_trim)
@@ -15,12 +15,14 @@ module LivebarnTools
         raise LivebarnTools::Error, "Trim times are longer than video duration"
       end
 
-      output_file = trimmed_filename(input_path)
+      output_file = trimmed_filename(input_path, dir: dir)
 
-      _out, err, status = Open3.capture3(
-        "ffmpeg", "-ss", front_trim.to_s, "-i", input_path,
-        "-t", new_duration.to_s, "-c", "copy", output_file
-      )
+      cmd = ["ffmpeg", "-ss", front_trim.to_s, "-i", input_path,
+             "-t", new_duration.to_s]
+      cmd += remove_audio ? ["-c:v", "copy", "-an"] : ["-c", "copy"]
+      cmd << output_file
+
+      _out, err, status = Open3.capture3(*cmd)
 
       unless status.success?
         raise LivebarnTools::Error, "ffmpeg trim failed: #{err}"
@@ -65,9 +67,10 @@ module LivebarnTools
       end
     end
 
-    def trimmed_filename(input_path)
+    def trimmed_filename(input_path, dir: nil)
       basename = File.basename(input_path, ".mp4")
-      "#{basename}_trimmed.mp4"
+      filename = "#{basename}_trimmed.mp4"
+      dir ? File.join(dir, filename) : filename
     end
   end
 end

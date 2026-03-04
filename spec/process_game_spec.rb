@@ -71,7 +71,7 @@ RSpec.describe LivebarnTools::ProcessGame do
 
     it "calls concatenator, trimmer, and uploader in order" do
       expect(concatenator).to receive(:concat).with("arena", "tigers").ordered
-      expect(trimmer).to receive(:trim).with("2026-03-01_tigers.mp4", "00:12:00", "00:05:00").ordered
+      expect(trimmer).to receive(:trim).with("2026-03-01_tigers.mp4", "00:12:00", "00:05:00", remove_audio: false).ordered
       expect(uploader).to receive(:upload).with(
         file: "2026-03-01_tigers_trimmed.mp4",
         title: "2026-03-01 tigers",

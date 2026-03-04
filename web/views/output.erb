@@ -1,0 +1,47 @@
+<script>document.querySelector('[data-step="output"]').classList.add('active');</script>
+
+<h2>Output</h2>
+
+<% if @error %>
+  <div class="error"><%= @error %></div>
+<% end %>
+
+<div class="player-container">
+  <video src="/video/<%= job.id %>" controls preload="metadata"></video>
+</div>
+
+<div class="output-options">
+  <section>
+    <h3>Download</h3>
+    <a href="/download/<%= job.id %>" class="btn">Download MP4</a>
+  </section>
+
+  <section>
+    <h3>Upload to YouTube</h3>
+    <form action="/upload_youtube/<%= job.id %>" method="post">
+      <div class="field">
+        <label for="title">Title</label>
+        <% date = File.basename(job.concat_file || '', '.mp4')[/^\d{4}-\d{2}-\d{2}/] rescue nil %>
+        <input type="text" id="title" name="title"
+               value="<%= date ? "#{job.team} #{date}" : job.team %>"
+               required>
+      </div>
+
+      <div class="field">
+        <label for="season">Season / Playlist</label>
+        <input type="text" id="season" name="season" placeholder="Spring 2026">
+      </div>
+
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="3"></textarea>
+      </div>
+
+      <button type="submit">Upload to YouTube</button>
+    </form>
+  </section>
+</div>
+
+<div class="actions">
+  <a href="/" class="btn-link">Start Over</a>
+</div>

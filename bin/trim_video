@@ -5,10 +5,13 @@ require "bundler/setup"
 require_relative "../lib/livebarn_tools"
 require "optparse"
 
+options = {}
+
 OptionParser.new do |opts|
+  opts.on("--no-audio", "Remove audio from output") { options[:remove_audio] = true }
   opts.on("-h", "--help") do
     puts <<~USAGE
-      Usage: trim_video <input_file> <front_trim_time> <end_trim_time>
+      Usage: trim_video [--no-audio] <input_file> <front_trim_time> <end_trim_time>
 
       Trim the beginning and end off a video file.
 
@@ -23,9 +26,13 @@ OptionParser.new do |opts|
         front_trim_time  Amount to trim from the beginning (e.g., 00:12:00)
         end_trim_time    Amount to trim from the end (e.g., 00:15:00)
 
+      Options:
+        --no-audio       Remove audio track from the output
+        -h, --help       Show this help
+
       Example:
         trim_video game.mp4 00:12:00 00:15:00
-        # Output: game_trimmed.mp4
+        trim_video --no-audio game.mp4 00:12:00 00:15:00
     USAGE
     exit 0
   end
@@ -38,7 +45,7 @@ unless ARGV.length == 3
 end
 
 begin
-  LivebarnTools::Trimmer.new.trim(ARGV[0], ARGV[1], ARGV[2])
+  LivebarnTools::Trimmer.new.trim(ARGV[0], ARGV[1], ARGV[2], remove_audio: options[:remove_audio] || false)
 rescue LivebarnTools::Error => e
   $stderr.puts "Error: #{e.message}"
   exit 1

@@ -1,0 +1,11 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - "4567:4567"
+    volumes:
+      - ${HOME}/.config/livebarn_tools:/root/.config/livebarn_tools
+    environment:
+      - RACK_ENV=production

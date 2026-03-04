@@ -1,0 +1,16 @@
+<script>document.querySelector('[data-step="output"]').classList.add('active');</script>
+
+<h2>Upload Complete</h2>
+
+<% last_msg = job.messages.reverse.find { |m| m.start_with?("done:upload:") } %>
+<% if last_msg %>
+  <% url = last_msg.sub("done:upload:", "") %>
+  <p class="success">Video uploaded successfully!</p>
+  <p><a href="<%= url %>" target="_blank"><%= url %></a></p>
+<% else %>
+  <p class="success">Upload finished.</p>
+<% end %>
+
+<div class="actions">
+  <a href="/" class="btn">Process Another Game</a>
+</div>

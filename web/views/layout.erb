@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Livebarn Tools</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <h1><a href="/">Livebarn Tools</a></h1>
+    <nav class="steps">
+      <span class="step" data-step="upload">1. Upload</span>
+      <span class="step" data-step="concat">2. Concat</span>
+      <span class="step" data-step="trim">3. Trim</span>
+      <span class="step" data-step="output">4. Output</span>
+    </nav>
+  </header>
+  <main>
+    <%= yield %>
+  </main>
+</body>
+</html>
