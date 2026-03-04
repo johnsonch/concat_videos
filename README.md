@@ -105,6 +105,14 @@ The arena name is detected automatically from the Livebarn filenames. YouTube up
 
 Install directly on macOS or Linux for the fastest experience. The CLI commands are ideal for scripting, automation, and AI agents.
 
+### Quick Install
+
+```sh
+curl -sSL https://raw.githubusercontent.com/johnsonch/concat_videos/main/install.sh | bash
+```
+
+This checks for dependencies, clones the repo to `~/.livebarn-tools`, installs gems, and symlinks the commands into `/usr/local/bin`. Run it again to update.
+
 ### Requirements
 
 - **FFmpeg** / **ffprobe** — video concatenation and trimming
@@ -113,10 +121,20 @@ Install directly on macOS or Linux for the fastest experience. The CLI commands 
 - **Linux** — should work (uses `xdg-open` fallback for OAuth)
 - **Windows** — untested; use Docker instead
 
-### Installation
+Install dependencies before running the install script:
 
 ```sh
-git clone https://github.com/yourusername/concat_videos.git
+# macOS
+brew install ffmpeg ruby git
+
+# Ubuntu / Debian
+sudo apt install ffmpeg ruby-full git
+```
+
+### Manual Installation
+
+```sh
+git clone https://github.com/johnsonch/concat_videos.git
 cd concat_videos
 make deps      # check system tools + install Ruby gems
 sudo make install
