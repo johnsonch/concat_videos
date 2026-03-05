@@ -12,9 +12,18 @@ Livebarn captures hockey games as a series of 30-minute segments from a fixed ri
 
 ## Quick Install
 
-### Mac / Linux
+### Mac (Homebrew)
 
-Installs the CLI tools. Requires [Homebrew](https://brew.sh) (macOS) or apt (Linux) for dependencies.
+```sh
+brew tap johnsonch/concat-videos https://github.com/johnsonch/concat_videos
+brew install livebarn-tools
+```
+
+This installs the CLI tools and FFmpeg. Run `brew upgrade livebarn-tools` to update.
+
+### Mac / Linux (shell script)
+
+Alternative if you don't use Homebrew, or on Linux:
 
 ```sh
 # Install dependencies first
@@ -48,11 +57,12 @@ Then open http://localhost:4567 in your browser.
 
 ## All Installation Options
 
-| Method | Best for | Setup |
-|--------|----------|-------|
-| [**Web UI**](#web-ui-docker) | Interactive use - preview video, click to set trim points | `docker-compose up --build` |
-| [**CLI (native)**](#cli-native) | Scripting, AI agents, automation on macOS/Linux | `curl` install above |
-| [**CLI (Docker)**](#cli-docker) | CLI without installing Ruby/FFmpeg locally | `docker build -t livebarn-tools .` |
+| Method                              | Best for                                                  | Setup                                         |
+|-------------------------------------|-----------------------------------------------------------|-----------------------------------------------|
+| [**Web UI**](#web-ui-docker)        | Interactive use - preview video, click to set trim points | `docker-compose up --build`                   |
+| [**CLI (Homebrew)**](#mac-homebrew) | macOS users                                               | `brew tap ... && brew install livebarn-tools` |
+| [**CLI (native)**](#cli-native)     | Scripting, AI agents, automation on macOS/Linux           | `curl` install or `make install`              |
+| [**CLI (Docker)**](#cli-docker)     | CLI without installing Ruby/FFmpeg locally                | `docker build -t livebarn-tools .`            |
 
 ---
 
@@ -87,11 +97,11 @@ To upload videos to YouTube, you need Google OAuth credentials. This is a one-ti
 
 ### 2. Place the credentials file
 
-| Platform | Path |
-|----------|------|
-| macOS / Linux | `~/.config/livebarn_tools/client_secret.json` |
-| Windows | `%USERPROFILE%\.config\livebarn_tools\client_secret.json` |
-| Docker (any OS) | Mount the directory into the container (see below) |
+| Platform        | Path                                                      |
+|-----------------|-----------------------------------------------------------|
+| macOS / Linux   | `~/.config/livebarn_tools/client_secret.json`             |
+| Windows         | `%USERPROFILE%\.config\livebarn_tools\client_secret.json` |
+| Docker (any OS) | Mount the directory into the container (see below)        |
 
 **macOS / Linux:**
 
