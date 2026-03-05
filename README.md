@@ -2,13 +2,13 @@
 
 [![Tests](https://github.com/johnsonch/concat_videos/actions/workflows/ci.yml/badge.svg)](https://github.com/johnsonch/concat_videos/actions/workflows/ci.yml)
 
-Turn raw Livebarn arena recordings into clean, trimmed game videos and publish them to YouTube — no video editing software required.
+Turn raw Livebarn arena recordings into clean, trimmed game videos and publish them to YouTube - no video editing software required.
 
 Livebarn captures hockey games as a series of 30-minute segments from a fixed rink camera. This toolkit merges those segments into a single file, trims the dead time before and after the game, strips arena audio if you want, and uploads the result as an unlisted YouTube video organized into per-season playlists. The whole process takes one command or a few clicks.
 
-**Self-hosted web UI** — Run `docker-compose up` and open a browser. A step-by-step wizard walks you through uploading segments, previewing video with a built-in player, clicking to set trim points, and downloading or uploading to YouTube. Everything runs locally on your machine.
+**Self-hosted web UI** - Run `docker-compose up` and open a browser. A step-by-step wizard walks you through uploading segments, previewing video with a built-in player, clicking to set trim points, and downloading or uploading to YouTube. Everything runs locally on your machine.
 
-**CLI for scripting and AI agents** — Four composable commands (`concat_videos`, `trim_video`, `upload_youtube`, `process_game`) that work from the terminal, in shell scripts, or driven by AI coding assistants like Claude Code. Install natively on macOS/Linux or run via Docker.
+**CLI for scripting and AI agents** - Four composable commands (`concat_videos`, `trim_video`, `upload_youtube`, `process_game`) that work from the terminal, in shell scripts, or driven by AI coding assistants like Claude Code. Install natively on macOS/Linux or run via Docker.
 
 ## Quick Install
 
@@ -50,7 +50,7 @@ Then open http://localhost:4567 in your browser.
 
 | Method | Best for | Setup |
 |--------|----------|-------|
-| [**Web UI**](#web-ui-docker) | Interactive use — preview video, click to set trim points | `docker-compose up --build` |
+| [**Web UI**](#web-ui-docker) | Interactive use - preview video, click to set trim points | `docker-compose up --build` |
 | [**CLI (native)**](#cli-native) | Scripting, AI agents, automation on macOS/Linux | `curl` install above |
 | [**CLI (Docker)**](#cli-docker) | CLI without installing Ruby/FFmpeg locally | `docker build -t livebarn-tools .` |
 
@@ -111,8 +111,8 @@ copy "$env:USERPROFILE\Downloads\client_secret_*.json" "$env:USERPROFILE\.config
 
 On first upload, a browser window opens for Google authorization. You approve access once and a refresh token is saved so you don't need to authorize again.
 
-- **CLI (native):** Just run `upload_youtube` or `process_game` — the browser opens automatically.
-- **Docker / Web UI:** The OAuth loopback flow requires a browser on the host. Authorize on macOS/Linux first using the native CLI, then mount the tokens into Docker. On Windows, use the Web UI — it will display the authorization URL for you to open manually.
+- **CLI (native):** Just run `upload_youtube` or `process_game` - the browser opens automatically.
+- **Docker / Web UI:** The OAuth loopback flow requires a browser on the host. Authorize on macOS/Linux first using the native CLI, then mount the tokens into Docker. On Windows, use the Web UI - it will display the authorization URL for you to open manually.
 
 **Windows with Docker (Web UI):**
 
@@ -120,7 +120,7 @@ On first upload, a browser window opens for Google authorization. You approve ac
 docker-compose up --build
 ```
 
-The `docker-compose.yml` mounts `~/.config/livebarn_tools` from your home directory. On Windows, Docker Desktop maps `$HOME` to `%USERPROFILE%`. If you haven't authorized yet, the Web UI will show the Google authorization URL — open it in your browser, approve access, and the token will be saved for future use.
+The `docker-compose.yml` mounts `~/.config/livebarn_tools` from your home directory. On Windows, Docker Desktop maps `$HOME` to `%USERPROFILE%`. If you haven't authorized yet, the Web UI will show the Google authorization URL - open it in your browser, approve access, and the token will be saved for future use.
 
 **Windows with Docker (CLI):**
 
@@ -152,13 +152,13 @@ Lake_Delton_Ice_Arena_Rink_1_2026-02-28T145955.mp4
 Onalaska_Omni_Center_Arena_2_2026-01-17T083333.mp4
 ```
 
-The `arena_name` argument to `concat_videos` and `process_game` is the portion before the date — e.g., `Kettle_Moraine_Ice_Center_Rink_1`. The tool globs for `{arena_name}_*.mp4` in the current directory, so if you have multiple games at the same arena, put each game's segments in a separate folder. The Web UI detects the arena automatically from the uploaded filenames.
+The `arena_name` argument to `concat_videos` and `process_game` is the portion before the date - e.g., `Kettle_Moraine_Ice_Center_Rink_1`. The tool globs for `{arena_name}_*.mp4` in the current directory, so if you have multiple games at the same arena, put each game's segments in a separate folder. The Web UI detects the arena automatically from the uploaded filenames.
 
 ---
 
 ## Web UI (Docker)
 
-A browser-based wizard for interactive game processing. Upload segments, preview video with a built-in player, click to set trim points, and download or upload the result. Works on macOS, Linux, and Windows — anywhere Docker runs.
+A browser-based wizard for interactive game processing. Upload segments, preview video with a built-in player, click to set trim points, and download or upload the result. Works on macOS, Linux, and Windows - anywhere Docker runs.
 
 ```sh
 docker-compose up --build
@@ -166,12 +166,12 @@ docker-compose up --build
 
 Open http://localhost:4567 and follow the steps:
 
-1. **Upload** — Select MP4 segments and enter the game title (e.g., "Tigers vs Hawks")
-2. **Concatenate** — Segments are merged automatically with progress feedback
-3. **Trim** — Use the video player to find trim points, click "Use current position" to set them
-4. **Output** — Download the MP4 or upload directly to YouTube
+1. **Upload** - Select MP4 segments and enter the game title (e.g., "Tigers vs Hawks")
+2. **Concatenate** - Segments are merged automatically with progress feedback
+3. **Trim** - Use the video player to find trim points, click "Use current position" to set them
+4. **Output** - Download the MP4 or upload directly to YouTube
 
-The arena name is detected automatically from the Livebarn filenames. YouTube upload requires OAuth tokens — authenticate on the host first (`upload_youtube` or `process_game`), then the mounted `~/.config/livebarn_tools/tokens.yaml` is used by the container.
+The arena name is detected automatically from the Livebarn filenames. YouTube upload requires OAuth tokens - authenticate on the host first (`upload_youtube` or `process_game`), then the mounted `~/.config/livebarn_tools/tokens.yaml` is used by the container.
 
 ---
 
@@ -181,10 +181,10 @@ Install directly on macOS or Linux for the fastest experience. The CLI commands 
 
 ### Requirements
 
-- **FFmpeg** / **ffprobe** — video concatenation and trimming
-- **Ruby** + **Bundler** — all tools are Ruby scripts
-- **macOS** — tested and fully supported
-- **Linux** — should work (uses `xdg-open` fallback for OAuth)
+- **FFmpeg** / **ffprobe** - video concatenation and trimming
+- **Ruby** + **Bundler** - all tools are Ruby scripts
+- **macOS** - tested and fully supported
+- **Linux** - should work (uses `xdg-open` fallback for OAuth)
 
 Install dependencies before running the install script:
 
@@ -246,11 +246,11 @@ process_game main-court tigers 00:12:00 00:05:00 --season x --skip-upload
 ```
 
 Options:
-- `--season SEASON` — playlist name (required unless `--skip-upload`)
-- `--title TITLE` — video title (auto-generated from date + team if omitted)
-- `--no-audio` — remove audio track from the trimmed video
-- `--no-cleanup` — keep the intermediate concatenated file
-- `--skip-upload` — skip the YouTube upload step
+- `--season SEASON` - playlist name (required unless `--skip-upload`)
+- `--title TITLE` - video title (auto-generated from date + team if omitted)
+- `--no-audio` - remove audio track from the trimmed video
+- `--no-cleanup` - keep the intermediate concatenated file
+- `--skip-upload` - skip the YouTube upload step
 
 #### Individual tools
 
@@ -339,4 +339,4 @@ docker run --rm \
 
 ## License
 
-MIT — see [LICENSE](LICENSE) for details.
+MIT - see [LICENSE](LICENSE) for details.

@@ -55,7 +55,7 @@ for bin in "${BINS[@]}"; do
   if [ -L "$dest" ] || [ ! -e "$dest" ]; then
     sudo ln -sf "$src" "$dest"
   else
-    warn "Skipping $dest — file exists and is not a symlink"
+    warn "Skipping $dest - file exists and is not a symlink"
   fi
 done
 
@@ -63,10 +63,10 @@ echo ""
 ok "Livebarn tools installed!"
 echo ""
 echo "  Commands available:"
-echo "    process_game   — all-in-one: concat, trim, upload"
-echo "    concat_videos  — merge Livebarn segments"
-echo "    trim_video     — trim front/end of a video"
-echo "    upload_youtube — upload to YouTube"
+echo "    process_game   - all-in-one: concat, trim, upload"
+echo "    concat_videos  - merge Livebarn segments"
+echo "    trim_video     - trim front/end of a video"
+echo "    upload_youtube - upload to YouTube"
 echo ""
 echo "  Run 'process_game --help' to get started."
 echo "  Run this script again to update."

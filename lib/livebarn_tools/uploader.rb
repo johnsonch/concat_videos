@@ -150,7 +150,7 @@ module LivebarnTools
         return client
       end
 
-      # No saved token — run OAuth loopback flow
+      # No saved token - run OAuth loopback flow
       server = TCPServer.new("127.0.0.1", 0)
       port = server.addr[1]
       client.redirect_uri = "http://127.0.0.1:#{port}"
@@ -175,7 +175,7 @@ module LivebarnTools
       unless returned_state == state
         conn.close
         server.close
-        raise LivebarnTools::Error, "OAuth state mismatch — possible CSRF attack. Please try again."
+        raise LivebarnTools::Error, "OAuth state mismatch - possible CSRF attack. Please try again."
       end
 
       code = request_line[/code=([^&\s]+)/, 1]
