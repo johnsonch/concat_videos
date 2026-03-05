@@ -1,25 +1,28 @@
 BINDIR ?= /usr/local/bin
 CURDIR_ABS := $(shell pwd)
 
-BINS = concat_videos trim_video upload_youtube process_game
+BINS = concat_videos trim_video upload_youtube process_game livebarn-server
 
 .PHONY: install uninstall deps setup test
 
 install:
 	@echo "Installing livebarn game tools..."
 	@mkdir -p $(BINDIR)
-	@ln -sf $(CURDIR_ABS)/bin/concat_videos  $(BINDIR)/concat_videos
-	@ln -sf $(CURDIR_ABS)/bin/trim_video     $(BINDIR)/trim_video
-	@ln -sf $(CURDIR_ABS)/bin/upload_youtube $(BINDIR)/upload_youtube
-	@ln -sf $(CURDIR_ABS)/bin/process_game   $(BINDIR)/process_game
+	@ln -sf $(CURDIR_ABS)/bin/concat_videos   $(BINDIR)/concat_videos
+	@ln -sf $(CURDIR_ABS)/bin/trim_video      $(BINDIR)/trim_video
+	@ln -sf $(CURDIR_ABS)/bin/upload_youtube  $(BINDIR)/upload_youtube
+	@ln -sf $(CURDIR_ABS)/bin/process_game    $(BINDIR)/process_game
+	@ln -sf $(CURDIR_ABS)/bin/livebarn-server $(BINDIR)/livebarn-server
 	@echo ""
 	@echo "Symlinked to $(BINDIR):"
-	@echo "  concat_videos  -> $(CURDIR_ABS)/bin/concat_videos"
-	@echo "  trim_video     -> $(CURDIR_ABS)/bin/trim_video"
-	@echo "  upload_youtube -> $(CURDIR_ABS)/bin/upload_youtube"
-	@echo "  process_game   -> $(CURDIR_ABS)/bin/process_game"
+	@echo "  livebarn-server -> $(CURDIR_ABS)/bin/livebarn-server"
+	@echo "  concat_videos   -> $(CURDIR_ABS)/bin/concat_videos"
+	@echo "  trim_video      -> $(CURDIR_ABS)/bin/trim_video"
+	@echo "  upload_youtube  -> $(CURDIR_ABS)/bin/upload_youtube"
+	@echo "  process_game    -> $(CURDIR_ABS)/bin/process_game"
 	@echo ""
-	@echo "Run 'process_game --help' to get started."
+	@echo "Run 'livebarn-server' to start the web UI."
+	@echo "Run 'process_game --help' for CLI usage."
 
 uninstall:
 	@echo "Uninstalling livebarn game tools..."
@@ -75,5 +78,5 @@ setup:
 	@echo ""
 	@echo "  cp ~/Downloads/client_secret_*.json ~/.config/livebarn_tools/client_secret.json"
 	@echo ""
-	@echo "Then run 'upload_youtube' or 'process_game' — it will open your"
+	@echo "Then run 'upload_youtube' or 'process_game' - it will open your"
 	@echo "browser for authorization on first use."

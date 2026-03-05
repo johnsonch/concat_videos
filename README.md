@@ -166,15 +166,25 @@ The `arena_name` argument to `concat_videos` and `process_game` is the portion b
 
 ---
 
-## Web UI (Docker)
+## Web UI
 
-A browser-based wizard for interactive game processing. Upload segments, preview video with a built-in player, click to set trim points, and download or upload the result. Works on macOS, Linux, and Windows - anywhere Docker runs.
+A browser-based wizard for interactive game processing. Upload segments, preview video with a built-in player, click to set trim points, and download or upload the result.
+
+If you installed via Homebrew or the install script, just run:
+
+```sh
+livebarn-server
+```
+
+This starts the web UI and opens your browser to http://localhost:4567. If the web gems aren't installed locally, it falls back to Docker automatically.
+
+You can also run it directly with Docker:
 
 ```sh
 docker-compose up --build
 ```
 
-Open http://localhost:4567 and follow the steps:
+Follow the steps:
 
 1. **Upload** - Select MP4 segments and enter the game title (e.g., "Tigers vs Hawks")
 2. **Concatenate** - Segments are merged automatically with progress feedback
@@ -219,12 +229,13 @@ sudo make install
 
 This symlinks four commands into `/usr/local/bin`:
 
-| Command          | Description                             |
-|------------------|-----------------------------------------|
-| `concat_videos`  | Merge Livebarn segments into one MP4    |
-| `trim_video`     | Trim front/end of a video               |
-| `upload_youtube` | Upload to YouTube + playlist management |
-| `process_game`   | All-in-one orchestrator                 |
+| Command           | Description                             |
+|-------------------|-----------------------------------------|
+| `livebarn-server` | Start the web UI                        |
+| `concat_videos`   | Merge Livebarn segments into one MP4    |
+| `trim_video`      | Trim front/end of a video               |
+| `upload_youtube`  | Upload to YouTube + playlist management |
+| `process_game`    | All-in-one CLI orchestrator             |
 
 Updates via `git pull` take effect immediately since the commands are symlinks.
 

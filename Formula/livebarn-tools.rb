@@ -11,12 +11,12 @@ class LivebarnTools < Formula
 
   def install
     system "bundle", "config", "set", "--local", "path", (libexec/"vendor").to_s
-    system "bundle", "config", "set", "--local", "without", "test web"
+    system "bundle", "config", "set", "--local", "without", "test"
     system "bundle", "install"
 
     libexec.install Dir["*", ".bundle"]
 
-    %w[concat_videos trim_video upload_youtube process_game].each do |cmd|
+    %w[concat_videos trim_video upload_youtube process_game livebarn-server].each do |cmd|
       (bin/cmd).write_env_script(
         libexec/"bin"/cmd,
         BUNDLE_GEMFILE: libexec/"Gemfile"
@@ -26,5 +26,6 @@ class LivebarnTools < Formula
 
   test do
     assert_match "Usage", shell_output("#{bin}/process_game --help")
+    assert_match "Usage", shell_output("#{bin}/livebarn-server --help")
   end
 end

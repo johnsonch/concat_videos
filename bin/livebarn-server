@@ -1,0 +1,88 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "optparse"
+
+options = { port: 4567 }
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: livebarn-server [--port PORT]"
+  opts.on("--port PORT", Integer, "Port to listen on (default: 4567)") { |v| options[:port] = v }
+  opts.on("-h", "--help") do
+    puts <<~USAGE
+      Usage: livebarn-server [--port PORT]
+
+      Start the Livebarn Tools web UI.
+
+      Opens a browser-based wizard for uploading video segments, previewing
+      and trimming video, and downloading or uploading to YouTube.
+
+      Options:
+        --port PORT   Port to listen on (default: 4567)
+        -h, --help    Show this help
+
+      Once running, open http://localhost:PORT in your browser.
+    USAGE
+    exit 0
+  end
+end.parse!
+
+# Find the project root (where config.ru lives)
+project_root = File.expand_path("..", __dir__)
+
+unless File.exist?(File.join(project_root, "config.ru"))
+  $stderr.puts "Error: cannot find config.ru in #{project_root}"
+  exit 1
+end
+
+# Try starting puma directly
+begin
+  require "bundler/setup"
+  require "puma"
+
+  ENV["PORT"] = options[:port].to_s
+  url = "http://localhost:#{options[:port]}"
+  puts "Starting Livebarn Tools web UI at #{url}"
+  puts "Press Ctrl+C to stop."
+  puts ""
+
+  # Open browser after a short delay
+  Thread.new do
+    sleep 2
+    open_cmd = RUBY_PLATFORM.include?("darwin") ? "open" : "xdg-open"
+    system(open_cmd, url)
+  end
+
+  puma_config = File.join(project_root, "config", "puma.rb")
+  Dir.chdir(project_root) do
+    exec("bundle", "exec", "puma", "-C", puma_config)
+  end
+rescue LoadError
+  # Puma not installed - try docker
+  unless system("docker", "info", out: File::NULL, err: File::NULL)
+    $stderr.puts "Error: puma gem not installed and Docker is not available."
+    $stderr.puts ""
+    $stderr.puts "Either install the web gems:"
+    $stderr.puts "  cd #{project_root} && bundle install"
+    $stderr.puts ""
+    $stderr.puts "Or install Docker Desktop:"
+    $stderr.puts "  https://www.docker.com/products/docker-desktop/"
+    exit 1
+  end
+
+  url = "http://localhost:#{options[:port]}"
+  puts "Starting Livebarn Tools web UI via Docker at #{url}"
+  puts "Press Ctrl+C to stop."
+  puts ""
+
+  # Open browser after a short delay
+  Thread.new do
+    sleep 5
+    open_cmd = RUBY_PLATFORM.include?("darwin") ? "open" : "xdg-open"
+    system(open_cmd, url)
+  end
+
+  Dir.chdir(project_root) do
+    exec("docker", "compose", "up", "--build")
+  end
+end

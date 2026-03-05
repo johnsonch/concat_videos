@@ -4,7 +4,7 @@ set -euo pipefail
 REPO="https://github.com/johnsonch/concat_videos.git"
 INSTALL_DIR="$HOME/.livebarn-tools"
 BIN_DIR="/usr/local/bin"
-BINS=(concat_videos trim_video upload_youtube process_game)
+BINS=(concat_videos trim_video upload_youtube process_game livebarn-server)
 
 info()  { printf "\033[1;34m==>\033[0m %s\n" "$1"; }
 ok()    { printf "\033[1;32m==>\033[0m %s\n" "$1"; }
@@ -63,11 +63,13 @@ echo ""
 ok "Livebarn tools installed!"
 echo ""
 echo "  Commands available:"
-echo "    process_game   - all-in-one: concat, trim, upload"
-echo "    concat_videos  - merge Livebarn segments"
-echo "    trim_video     - trim front/end of a video"
-echo "    upload_youtube - upload to YouTube"
+echo "    livebarn-server - start the web UI"
+echo "    process_game    - all-in-one: concat, trim, upload"
+echo "    concat_videos   - merge Livebarn segments"
+echo "    trim_video      - trim front/end of a video"
+echo "    upload_youtube  - upload to YouTube"
 echo ""
-echo "  Run 'process_game --help' to get started."
+echo "  Run 'livebarn-server' to start the web UI."
+echo "  Run 'process_game --help' for CLI usage."
 echo "  Run this script again to update."
 echo ""
