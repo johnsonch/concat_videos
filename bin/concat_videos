@@ -14,7 +14,7 @@ OptionParser.new do |opts|
 
       Finds all files matching {arena_name}_*.mp4 in the current directory,
       sorts them by name, and concatenates them losslessly using FFmpeg.
-      Output is named {date}_{team_name}.mp4.
+      Output is named {date}_{team_name}_full.mp4.
 
       Arguments:
         arena_name   Name of the arena (matches {arena_name}_*.mp4)
@@ -23,7 +23,7 @@ OptionParser.new do |opts|
       Example:
         concat_videos main-court tigers
         # Given: main-court_2026-03-01T10-00.mp4, main-court_2026-03-01T11-00.mp4
-        # Output: 2026-03-01_tigers.mp4
+        # Output: 2026-03-01_tigers_full.mp4
     USAGE
     exit 0
   end

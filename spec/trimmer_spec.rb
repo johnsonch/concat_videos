@@ -36,6 +36,10 @@ RSpec.describe LivebarnTools::Trimmer do
     it "strips directory from input path" do
       expect(trimmer.trimmed_filename("/some/path/game.mp4")).to eq("game_trimmed.mp4")
     end
+
+    it "replaces _full with _trimmed" do
+      expect(trimmer.trimmed_filename("game_full.mp4")).to eq("game_trimmed.mp4")
+    end
   end
 
   describe "#probe_duration" do

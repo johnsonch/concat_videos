@@ -17,7 +17,7 @@ module LivebarnTools
       end
 
       date = extract_date(segments.first)
-      output_file = File.join(dir, "#{date}_#{team_name}.mp4")
+      output_file = File.join(dir, "#{date}_#{team_name}_full.mp4")
 
       Tempfile.create(["file_list", ".txt"], dir) do |f|
         segments.each { |s| f.puts "file '#{s.gsub("'", "'\\\\''")}'" }

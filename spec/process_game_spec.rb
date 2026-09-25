@@ -63,7 +63,7 @@ RSpec.describe LivebarnTools::ProcessGame do
 
   describe "#process" do
     before do
-      allow(concatenator).to receive(:concat).and_return("2026-03-01_tigers.mp4")
+      allow(concatenator).to receive(:concat).and_return("2026-03-01_tigers_full.mp4")
       allow(trimmer).to receive(:trim).and_return("2026-03-01_tigers_trimmed.mp4")
       allow(uploader).to receive(:upload).and_return("https://youtu.be/abc123")
       allow(File).to receive(:delete)
@@ -71,7 +71,7 @@ RSpec.describe LivebarnTools::ProcessGame do
 
     it "calls concatenator, trimmer, and uploader in order" do
       expect(concatenator).to receive(:concat).with("arena", "tigers").ordered
-      expect(trimmer).to receive(:trim).with("2026-03-01_tigers.mp4", "00:12:00", "00:05:00", remove_audio: false).ordered
+      expect(trimmer).to receive(:trim).with("2026-03-01_tigers_full.mp4", "00:12:00", "00:05:00", remove_audio: false).ordered
       expect(uploader).to receive(:upload).with(
         file: "2026-03-01_tigers_trimmed.mp4",
         title: "2026-03-01 tigers",
@@ -121,7 +121,7 @@ RSpec.describe LivebarnTools::ProcessGame do
     end
 
     it "cleans up intermediate file by default" do
-      expect(File).to receive(:delete).with("2026-03-01_tigers.mp4")
+      expect(File).to receive(:delete).with("2026-03-01_tigers_full.mp4")
 
       processor.process(
         arena: "arena", team: "tigers",

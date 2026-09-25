@@ -187,7 +187,7 @@ module LivebarnTools
       file = job.trimmed_file || job.concat_file
       halt 404, "No file available" unless file && File.exist?(file)
       send_file file, type: "video/mp4", disposition: "attachment",
-                filename: File.basename(file)
+                filename: File.basename(file).sub(/_trimmed(?=\.mp4\z)/, "")
     end
 
     # YouTube upload

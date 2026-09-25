@@ -82,7 +82,7 @@ RSpec.describe LivebarnTools::Concatenator do
 
       it "concatenates segments into a dated output file" do
         output = concatenator.concat("rink", "tigers", dir: @tmpdir)
-        expect(output).to eq(File.join(@tmpdir, "2026-03-01_tigers.mp4"))
+        expect(output).to eq(File.join(@tmpdir, "2026-03-01_tigers_full.mp4"))
         expect(File.exist?(output)).to be true
         expect(File.size(output)).to be > 0
       end

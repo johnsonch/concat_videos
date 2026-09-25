@@ -69,6 +69,7 @@ module LivebarnTools
 
     def trimmed_filename(input_path, dir: nil)
       basename = File.basename(input_path, ".mp4")
+      basename = basename.delete_suffix("_full")
       filename = "#{basename}_trimmed.mp4"
       dir ? File.join(dir, filename) : filename
     end

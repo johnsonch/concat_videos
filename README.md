@@ -281,11 +281,11 @@ Options:
 concat_videos <arena_name> <team_name>
 ```
 
-Finds all `{arena_name}_*.mp4` files in the current directory, sorts them, and concatenates into `{date}_{team_name}.mp4`.
+Finds all `{arena_name}_*.mp4` files in the current directory, sorts them, and concatenates into `{date}_{team_name}_full.mp4`.
 
 ```sh
 concat_videos main-court tigers
-# Output: 2026-03-01_tigers.mp4
+# Output: 2026-03-01_tigers_full.mp4
 ```
 
 ##### `trim_video`
@@ -297,11 +297,11 @@ trim_video <input_file> <front_trim> <end_trim>
 Trims the first `<front_trim>` and last `<end_trim>` from a video. Times in `HH:MM:SS`, `MM:SS`, or seconds.
 
 ```sh
-trim_video 2026-03-01_tigers.mp4 00:12:00 00:05:00
+trim_video 2026-03-01_tigers_full.mp4 00:12:00 00:05:00
 # Output: 2026-03-01_tigers_trimmed.mp4
 
 # Same, but strip the audio track
-trim_video --no-audio 2026-03-01_tigers.mp4 00:12:00 00:05:00
+trim_video --no-audio 2026-03-01_tigers_full.mp4 00:12:00 00:05:00
 ```
 
 ##### `upload_youtube`
@@ -341,7 +341,7 @@ docker run --rm \
 docker run --rm \
   -v "$PWD:/workspace" \
   -v "$HOME/.config/livebarn_tools:/root/.config/livebarn_tools" \
-  livebarn-tools trim_video 2026-03-01_tigers.mp4 00:12:00 00:05:00
+  livebarn-tools trim_video 2026-03-01_tigers_full.mp4 00:12:00 00:05:00
 
 # Upload to YouTube
 docker run --rm \
