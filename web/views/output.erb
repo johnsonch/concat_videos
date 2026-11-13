@@ -30,7 +30,12 @@
       <% if auth == :needs_auth %>
         <div class="error">
           <strong>YouTube authorization needed.</strong><br>
-          Run <code>upload_youtube</code> on the host to authorize via browser, then restart the container.
+          <% if File.exist?("/.dockerenv") %>
+            Run <code>upload_youtube --auth</code> on the host to authorize via browser, then restart the container.
+          <% else %>
+            Run <code>upload_youtube --auth</code> in a terminal to authorize via browser, then reload this page.
+          <% end %>
+          The token is saved to <code><%= LivebarnTools::Uploader::TOKEN_PATH %></code>.
         </div>
       <% end %>
       <form action="/upload_youtube/<%= job.id %>" method="post">

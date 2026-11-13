@@ -53,6 +53,12 @@ RSpec.describe LivebarnTools::Uploader do
       }.to raise_error(LivebarnTools::Error, /--title is required/)
     end
 
+    it "allows --auth without a file or title" do
+      result = uploader.parse_args(["--auth"])
+      expect(result[:auth_only]).to be true
+      expect(result[:file]).to be_nil
+    end
+
     it "exits 0 on --help" do
       expect {
         uploader.parse_args(["--help"])

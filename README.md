@@ -121,7 +121,8 @@ copy "$env:USERPROFILE\Downloads\client_secret_*.json" "$env:USERPROFILE\.config
 
 On first upload, a browser window opens for Google authorization. You approve access once and a refresh token is saved so you don't need to authorize again.
 
-- **CLI (native):** Just run `upload_youtube` or `process_game` - the browser opens automatically.
+- **CLI (native):** Run `upload_youtube --auth` to authorize without uploading anything, or just run `upload_youtube` or `process_game` - the browser opens automatically.
+- **Web UI (native, `livebarn-server`):** Run `upload_youtube --auth` in a terminal, then reload the page. No restart needed.
 - **Docker / Web UI:** The OAuth loopback flow requires a browser on the host. Authorize on macOS/Linux first using the native CLI, then mount the tokens into Docker. On Windows, use the Web UI - it will display the authorization URL for you to open manually.
 
 **Windows with Docker (Web UI):**
@@ -356,7 +357,7 @@ docker run --rm \
   livebarn-tools process_game main-court tigers 00:12:00 00:05:00 --season "Spring 2026"
 ```
 
-**Note:** YouTube authentication requires a browser, so run `upload_youtube` on the host first to generate `~/.config/livebarn_tools/tokens.yaml`, then mount it into the container for subsequent uploads.
+**Note:** YouTube authentication requires a browser, so run `upload_youtube --auth` on the host first to generate `~/.config/livebarn_tools/tokens.yaml`, then mount it into the container for subsequent uploads.
 
 ## License
 

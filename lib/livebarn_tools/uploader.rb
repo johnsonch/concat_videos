@@ -22,6 +22,11 @@ module LivebarnTools
 
     def run(argv)
       options = parse_args(argv)
+      if options[:auth_only]
+        authorize
+        puts "YouTube authorization saved to #{TOKEN_PATH}"
+        return
+      end
       upload(
         file:        options[:file],
         title:       options[:title],
@@ -52,6 +57,7 @@ module LivebarnTools
     def usage
       puts <<~USAGE
         Usage: upload_youtube <video_file> --title TITLE [--season SEASON] [--description DESC]
+               upload_youtube --auth
 
         Upload a video to YouTube as unlisted and optionally add it to a
         season playlist.
@@ -61,6 +67,8 @@ module LivebarnTools
           --season SEASON        Find or create an unlisted playlist with this name
                                  and add the video to it
           --description DESC     Video description (default: empty)
+          --auth                 Authorize with Google (opens a browser) and save
+                                 the token without uploading anything
           -h, --help             Show this help
 
         Configuration:
@@ -83,10 +91,13 @@ module LivebarnTools
         opts.on("--title TITLE")             { |v| options[:title] = v }
         opts.on("--season SEASON")           { |v| options[:season] = v }
         opts.on("--description DESC")        { |v| options[:description] = v }
+        opts.on("--auth")                    { options[:auth_only] = true }
         opts.on("-h", "--help")              { usage; exit 0 }
       end
 
       remaining = parser.parse(argv)
+      return options if options[:auth_only]
+
       options[:file] = remaining.first
 
       unless options[:file]
